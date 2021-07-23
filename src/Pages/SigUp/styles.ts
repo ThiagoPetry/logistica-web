@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { shade } from 'polished';
 
-import backgroundSigIn from '../../assets/estoque.jpg';
+import backgroundSigUp from '../../assets/entregador.jpg';
 
 export const Container = styled.div`
     height: 100vh;
@@ -65,7 +65,7 @@ export const Content = styled.div`
 
 export const Background = styled.div`
     flex: 1;
-    background: url(${backgroundSigIn}) no-repeat center;
+    background: url(${backgroundSigUp}) no-repeat center;
     background-size: cover;
     box-shadow: 0px 0px 5px rgb(0, 0, 0, 0.5);
 `;

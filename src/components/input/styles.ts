@@ -1,13 +1,11 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-    border-radius:  10px;
     background: transparent;
     border: 0;
-    border-bottom: 2px solid #fff;
     padding: 12px;
+    border-bottom: 2px solid #fff;
     width: 100%;
-
     display: flex;
     align-items: center;
 
@@ -24,5 +22,9 @@ export const Container = styled.div`
         &::placeholder {
             color: #a8a8a8;
         }
+    }
+
+    svg {
+        margin-right: 10px;
     }
 `;
