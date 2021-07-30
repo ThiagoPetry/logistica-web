@@ -7,6 +7,8 @@ import SigUp from './Pages/SigUp';
 
 import { AuthProvider } from './context/AuthContext';
 
+import ToastContainer from './components/ToastContainer';
+
 const App: React.FC = () => {
   return (
     <>
