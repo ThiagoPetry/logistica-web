@@ -4,6 +4,7 @@ import api from '../service/api';
 
 interface AuthState {
     jwt: string;
+    usuario: object;
 }
 
 interface SingInCredentials {
@@ -12,6 +13,7 @@ interface SingInCredentials {
 }
 
 interface AuthContextData {
+    usuario: object;
     singIn(credentials: SingInCredentials): Promise<void>;
     singOut(): void;
 }
@@ -23,9 +25,10 @@ const AuthContext = createContext<AuthContextData>(
 export const AuthProvider: React.FC = ({ children }) => {
     const [data, setData] = useState<AuthState>(() => {
         const jwt = localStorage.getItem("@Logistica:token");
+        const usuario = localStorage.getItem("@Logistica:usuario");
 
-        if(jwt) {
-            return {jwt};
+        if(jwt && usuario) {
+            return { jwt, usuario: JSON.parse(usuario) };
         }
 
         return {} as AuthState;
@@ -37,21 +40,22 @@ export const AuthProvider: React.FC = ({ children }) => {
             senha,
         });
 
-        console.log(response.data);
-        const { jwt } = response.data;
+        const { jwt, usuario } = response.data;
 
         localStorage.setItem("@Logistica:token", jwt);
-        setData(jwt);       
+        localStorage.setItem("@Logistica:usuario", JSON.stringify(usuario));
+        setData({ jwt, usuario });       
     }, []);
 
     const singOut = useCallback(() => {
         localStorage.removeItem("@Logistica:token");
+        localStorage.removeItem("@Logistica:usuario");
 
         setData({} as AuthState);
     }, []);
 
     return (
-        <AuthContext.Provider value={{singIn, singOut}}>
+        <AuthContext.Provider value={{ usuario: data.usuario, singIn, singOut }}>
             {children}
         </AuthContext.Provider>
     );

@@ -5,6 +5,7 @@ import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
+import { Link, useHistory } from 'react-router-dom';
 
 import { useAuth } from '../../hooks/auth';
 import { useToast } from '../../hooks/toast';
@@ -26,6 +27,7 @@ const SigIn: React.FC = () => {
 
     const { singIn } = useAuth();
     const { addToast } = useToast();
+    const history =  useHistory();
 
     const handleSubmit = useCallback(async (data: SingInFormData) => {
         try {
@@ -34,19 +36,26 @@ const SigIn: React.FC = () => {
             const schema = Yup.object().shape({
                 email: Yup.string().required('E-mail obrigatório').email('Informe um e-mail válido'),
                 senha: Yup.string().required('Senha obrigatória'),
-            })
+            });
 
             await schema.validate(data, {
                 abortEarly: false,
-            })
+            });
 
-            singIn({
+            await singIn({
                 email: data.email,
                 senha: data.senha
-            })
+            });
+
+            history.push('/');
+
         } catch(err) {
-            const errors = getValidationErrors(err);
-            formRef.current?.setErrors(errors);
+            if(err instanceof Yup.ValidationError) {
+                const errors = getValidationErrors(err);
+                formRef.current?.setErrors(errors);
+
+                return;
+            } 
 
             addToast({
                 type: 'error',
@@ -70,10 +79,10 @@ const SigIn: React.FC = () => {
                     <a href="./">Esqueci minha senha</a>
                 </Form>
 
-                <a href="./">
+                <Link to="/signup">
                     <FiLogIn />
                     Criar conta
-                </a>
+                </Link>
             </Content>
             <Background />
         </Container>
